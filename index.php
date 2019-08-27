@@ -7,6 +7,29 @@
 
     // Establish a connection to the DSN.
 
+    // Doctrine ORM option
+    require_once "bootstrap.php";
+
+    
+    // $user = new Users();
+    // $user->setName ("Quasimodo");
+    // $user->setPostNumber ("PARIS-12");
+
+    // $em->persist($user);
+    // $em->flush();
+
+    $user1 = $em->find('Users', 257);
+
+    if ($user1 === null) {
+    echo "No user nor found.\n";
+    } else {
+
+    echo $user1->getName()." found";
+    }
+
+
+    // PDO option
+
     $host = '127.0.0.1';
     $db   = 'mojabaza';
     $user = 'rok';
