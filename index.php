@@ -1,76 +1,40 @@
 <?php
 
-    // Display errors if there are any.
+    session_start();
 
+    // Display errors if there are any.
     ini_set('display_errors', 1);
     error_reporting(E_ALL);
 
-    // Establish a connection to the DSN.
-
-    // Doctrine ORM option
+    // Use Doctrine ORM.
     require_once "bootstrap.php";
+                        
+    // Search database querys with post number. Use Doctrine ORM.
+    function find_rows_containing_post_number_orm($em, $post_number) {
 
-    
-    // $user = new Users();
-    // $user->setName ("Quasimodo");
-    // $user->setPostNumber ("PARIS-12");
+        $search_variable = "%$post_number%";
 
-    // $em->persist($user);
-    // $em->flush();
+        $result = $em->getRepository("Users")->createQueryBuilder('users_query_builder')
+        ->andWhere('users_query_builder.post_number LIKE :pn')
+        ->setParameter('pn', $search_variable)
+        ->getQuery()
+        ->getResult();
 
-    $user1 = $em->find('Users', 257);
+        // Print array of results as rows in table.
+        echo "<table class='table table-dark'>";
+        echo "<tr><th scope='col'>Id</th><th scope='col'>Name</th><th scope='col'>Post Number</th></tr>";
 
-    if ($user1 === null) {
-    echo "No user nor found.\n";
-    } else {
-
-    echo $user1->getName()." found";
-    }
-
-
-    // PDO option
-
-    $host = '127.0.0.1';
-    $db   = 'mojabaza';
-    $user = 'rok';
-    $pass = '123';
-    $charset = 'utf8mb4';
-
-    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-    $options = [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false,
-    ];
-    try {
-        $pdo = new PDO($dsn, $user, $pass, $options);
-    } catch (\PDOException $e) {
-        throw new \PDOException($e->getMessage(), (int)$e->getCode());
-    }
-
-
-    // Search database querys. Take post number for input. Find all querys that contain string.
-
-    function find_rows_containing_post_number($find, $pdo) {
-
-            $post_number = htmlentities($_POST['post_number']);
-            $search = "%$post_number%";
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE post_number LIKE ?");
-            $stmt->execute([$search]);
-
-            echo "<table class='table table-dark'>";
-            echo "<tr><th scope='col'>Id</th><th scope='col'>Name</th><th scope='col'>Post Number</th></tr>";
-
-            while ($row = $stmt->fetch()) {
+        if ($result !== null) {
+            foreach($result as $user) {
                 echo '<tr>';
-                echo "<td scope='row'>" . $row['id'] . '</td>';
-                echo "<td scope='row'>" . $row['name'] . '</td>';
-                echo "<td scope='row'>" . $row['post_number'] . '</td>';
+                echo "<td scope='row'>" . $user->getId() . '</td>';
+                echo "<td scope='row'>" . $user->getName() . '</td>';
+                echo "<td scope='row'>" . $user->getPostNumber() . '</td>';
                 echo '</tr>';
             }
-            
-            echo '</table>';
         }
+        echo '</table>';
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,10 +66,10 @@
                                 <input type="text" class="form-control mb-2" name="post_number" placeholder="Post Number">
                             </div>
                             <div class="col-auto">
-                                <input type="submit" class="form-control mb-2" name="find" value="Submit" class="btn btn-primary mb-2">
+                                <input type="submit" class="form-control mb-2" name="search" value="Submit" class="btn btn-primary mb-2">
                             </div>
                         </div>
-                        <small id="emailHelp" class="form-text text-muted">To display the whole table, submit with an empty input box.</small>
+                        <small class="form-text text-muted">To display the whole table, submit with an empty input box.</small>
                     </form>
             </div>
 
@@ -113,7 +77,7 @@
             <div class="py-1">
                 <h3>Add entry</h3>
                     <!-- Form action executed in the add.php script. -->
-                    <form action="add.php" method="POST" class="form-inline">
+                    <form action="add.php" method="POST">
                         <div class="form-row align-items-center">
                             <div class="col-auto">
                                 <input type="text" class="form-control mb-2" name="name" placeholder="Name" required>
@@ -125,24 +89,34 @@
                                 <input type="submit" class="form-control mb-2" value="Submit" name="add" class="btn btn-primary mb-2">
                             </div>
                         </div>
+                        <!-- If sesstion variable is set, error appears. -->
+                        <small class="form-text text-danger"><?php if(isset($_SESSION['adderr_longname'])) {echo $_SESSION['adderr_longname'];}?></small>
+                        <small class="form-text text-danger"><?php if(isset($_SESSION['adderr_longpost'])) {echo $_SESSION['adderr_longpost'];}?></small>
+                        <small class="form-text text-danger"><?php if(isset($_SESSION['adderr_userexists'])) {echo $_SESSION['adderr_userexists'];}?></small>
+                        <small class="form-text text-success"><?php if(isset($_SESSION['addsucc'])) {echo $_SESSION['addsucc'];}?></small>
                     </form>
             </div>
+
 
             <!-- DELETE FORM -->
             <div class="py-1">
                 <h3>Delete entry</h3>
                     <!-- Form action executed in the delete.php script. -->
-                    <form action="delete.php" method="POST" class="form-inline">
+                    <form action="delete.php" method="POST">
                         <div class="form-row align-items-center">
                             <div class="col-auto">
                                 <input type="text" class="form-control mb-2" name="id" placeholder="ID" required>
                             </div>
                             <div class="col-auto">
-                                <input type="submit" class="form-control mb-2" value="Submit" name="delete" class="btn btn-primary mb-2">
+                                <input type="submit" class="form-control mb-2" name="delete" value="Submit" class="btn btn-primary mb-2">
                             </div>
                         </div>
+                        <!-- If sesstion variable is set, error appears. -->
+                        <small class="form-text text-danger"><?php if(isset($_SESSION['delerr'])) {echo $_SESSION['delerr'];}?></small>
+                        <small class="form-text text-success"><?php if(isset($_SESSION['delsucc'])) {echo $_SESSION['delsucc'];}?></small>
                     </form>
             </div>
+
 
         </div>
 
@@ -150,24 +124,18 @@
         <!-- If search query is run, display the results, otherwise display the whole table. -->
         <div class="container">
             <?php
-            if( isset($_POST['find'])){
+            if( isset($_POST['search'])){
+                    // Reset all errors.
+                    session_unset();
 
-                    $find = htmlentities($_POST['find']);
-                    find_rows_containing_post_number($find, $pdo);
+                    // Get 'post_number' variable from the search form.
+                    $post_number = htmlentities($_POST['post_number']);
+
+                    find_rows_containing_post_number_orm($em, $post_number);
                 } else {
-                    $stmt = $pdo->query('SELECT * FROM users');
-
-                    echo "<table class='table table-dark'>";
-                    echo "<tr><th scope='col'>Id</th><th scope='col'>Name</th><th scope='col'>Post Number</th></tr>";
-                    while ($row = $stmt->fetch()) {
-                        echo '<tr>';
-                        echo "<td scope='row'>" . $row['id'] . '</td>';
-                        echo "<td scope='row'>" . $row['name'] . '</td>';
-                        echo "<td scope='row'>" . $row['post_number'] . '</td>';
-                        echo '</tr>';
+                    // Show the whole table when the website is visited.
+                    find_rows_containing_post_number_orm($em, '');
                     }
-                     echo "</table>";
-            }
             ?>
         </div>
     </body>

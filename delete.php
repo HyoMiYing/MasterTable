@@ -1,49 +1,41 @@
 <?php
 
-    // Show errors if there are any.
+    session_start();
 
+    // Show errors if there are any.
     ini_set('display_errors', 1);
     error_reporting(E_ALL);
 
-    // Set up a connection with DNS (PDO).
+    // Use Doctrine ORM.
+    require_once "bootstrap.php";
 
-    $host = '127.0.0.1';
-    $db   = 'mojabaza';
-    $user = 'rok';
-    $pass = '123';
-    $charset = 'utf8mb4';
+    // Validate input and delete query if it exists. Send out error message if it doesn't exist.
+    function delete_entry_orm($id, $em) {
+    
+        session_unset();
 
-    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-    $options = [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false,
-    ];
-    try {
-        $pdo = new PDO($dsn, $user, $pass, $options);
-    } catch (\PDOException $e) {
-        throw new \PDOException($e->getMessage(), (int)$e->getCode());
+        $single_user = $em->find('Users', $id);
+
+        // Check if user entry is found. And delete it.
+        if($single_user != NULL) {
+            $em->remove($single_user);
+            $em->flush();
+            $_SESSION['delsucc'] = "User with ID=".$id." deleted successfully";
+            header('Location: http://test.local');
+        // Return to home page with error if user doesn't exist.
+        } else {
+            $_SESSION['delerr'] = "User with ID=".$id." does not exist";
+            header('Location: http://test.local');
+        }
+
     }
-
-    // Function that deletes a MySql row, identified by ID.
-
-    function delete_entry($id, $pdo) {
-        $sql = "DELETE FROM users WHERE id = ?";
-        $stmt= $pdo->prepare($sql);
-        $execution = $stmt->execute([$id]);
-    }
-
-    // If the recieved data is valid, the "delete" function is run. Otherwise just reload the page.
+    
     
     if(isset($_POST['delete'])){
         $id = htmlentities($_POST['id']);
-        
-        if(empty($id)){
-            header("Location: http://test.local");
-            exit;
-        } else {
-            delete_entry($id, $pdo);
-            header("Location: http://test.local");
-            exit;
-        }
+            delete_entry_orm($id, $em);
+    
+    // Redirect to home page if 'delete.php' is accessed manually.
+    } else {
+        header('Location: http://test.local');
     }
