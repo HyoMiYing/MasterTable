@@ -1,4 +1,4 @@
-<h1>Oddaja naloge</h1>
+<h1>Oddaja naloge z Doctrine ORM</h1>
 
 Da sem lahko pravilno ustvaril tabelo uporabnikov, sem vašo .sql datoteko najprej nekoliko popravil. 
 V originalni datoteki sta bili dve polji 'id'. Enega sem izbrisal. Datoteko sem nato preimenoval v 'dump.sql'.
@@ -20,5 +20,6 @@ V originalni datoteki sta bili dve polji 'id'. Enega sem izbrisal. Datoteko sem 
 
 <h3>Opombe</h3>
 
-V tem commitu so opravljene stvari, ki so naštete pod glavne naloge.
-V nadaljevanju vam pošljem še dodatne naloge, ter dodatno validacijo vnosnih polj.
+V tem commitu so opravljene stvari, ki so naštete pod glavne naloge in prva dodatna naloga (Doctrine ORM).
+Dodan je tudi form validation in errorji.
+V naslednjem commitom bom dodal še login formo z passwordom.
