@@ -2,6 +2,8 @@
 
 Da sem lahko pravilno ustvaril tabelo uporabnikov, sem vašo .sql datoteko najprej nekoliko popravil. 
 V originalni datoteki sta bili dve polji 'id'. Enega sem izbrisal. Datoteko sem nato preimenoval v 'dump.sql'.
+V 'dump.sql' je tudi ukaz za ustvarjanje nove tabele 'authentication', ki služi za registriranje in prepoznavanje
+uporabnikov v login sistemu.
 
 <h3>Uporaba</h3>
 
@@ -20,6 +22,4 @@ V originalni datoteki sta bili dve polji 'id'. Enega sem izbrisal. Datoteko sem 
 
 <h3>Opombe</h3>
 
-V tem commitu so opravljene stvari, ki so naštete pod glavne naloge in prva dodatna naloga (Doctrine ORM).
-Dodan je tudi form validation in errorji.
-V naslednjem commitom bom dodal še login formo z passwordom.
+V nalogi je zdaj vse razen knapsack problema.
