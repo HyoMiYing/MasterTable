@@ -8,6 +8,7 @@
 
     // Load files for our application
     require_once("./entities/Users.php");
+    require_once("./entities/Authentication.php");
 
     $paths = array("entities");
     $isDevMode = true;
@@ -20,7 +21,7 @@
         'dbname'   => 'mojabaza',
     );
 
-    $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
+    $config = Setup::createXMLMetadataConfiguration($paths, $isDevMode);
     $em = EntityManager::create($dbParams, $config); 
 
     // echo "I am bootstrap.php";

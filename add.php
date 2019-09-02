@@ -25,7 +25,12 @@
     // If the recieved data is valid, the "add" function is run. Otherwise just reload the page.
     if(isset($_POST['add'])){
 
-        session_unset();
+        unset($_SESSION['adderr_longname']);
+        unset($_SESSION['adderr_longpost']);
+        unset($_SESSION['adderr_userexists']);
+        unset($_SESSION['addsucc']);
+        unset($_SESSION['delerr']);
+        unset($_SESSION['delsucc']);
 
         $name = htmlentities($_POST['name']);
         $post_number = htmlentities($_POST['post_number']);

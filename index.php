@@ -8,7 +8,19 @@
 
     // Use Doctrine ORM.
     require_once "bootstrap.php";
-                        
+
+    // Redirect if not logged in
+    if (isset($_SESSION['username'])) {
+        // $_SESSION['username'] is logged in
+    } else {
+        header("Location: http://test.local/login.php");
+    }
+
+    if(isset($_POST['logout'])) {
+        unset($_SESSION['username']);
+        header("Location: http://test.local/login.php");
+    }
+
     // Search database querys with post number. Use Doctrine ORM.
     function find_rows_containing_post_number_orm($em, $post_number) {
 
@@ -50,7 +62,12 @@
                 <a class="navbar-brand" href="#">
                     <img src="/img/php.png" width="50" height="50" class="d-inline-block align-top" alt="">
                 </a>
-                <h1>Application <small>by Rok Klančar</small></h1>
+                <div class="float-right">
+                    <h1>Application <small>by Rok Klančar</small></h1>
+                    <form action="" method="post">
+                        <input type="submit" class="form-control mb-2" name="logout" value="Log out" class="btn btn-primary mb-2">
+                    </form>
+                </div>
             </div>
         </nav>
     <body>
@@ -97,7 +114,6 @@
                     </form>
             </div>
 
-
             <!-- DELETE FORM -->
             <div class="py-1">
                 <h3>Delete entry</h3>
@@ -126,7 +142,12 @@
             <?php
             if( isset($_POST['search'])){
                     // Reset all errors.
-                    session_unset();
+                    unset($_SESSION['adderr_longname']);
+                    unset($_SESSION['adderr_longpost']);
+                    unset($_SESSION['adderr_userexists']);
+                    unset($_SESSION['addsucc']);
+                    unset($_SESSION['delerr']);
+                    unset($_SESSION['delsucc']);
 
                     // Get 'post_number' variable from the search form.
                     $post_number = htmlentities($_POST['post_number']);

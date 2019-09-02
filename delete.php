@@ -12,7 +12,12 @@
     // Validate input and delete query if it exists. Send out error message if it doesn't exist.
     function delete_entry_orm($id, $em) {
     
-        session_unset();
+        unset($_SESSION['adderr_longname']);
+        unset($_SESSION['adderr_longpost']);
+        unset($_SESSION['adderr_userexists']);
+        unset($_SESSION['addsucc']);
+        unset($_SESSION['delerr']);
+        unset($_SESSION['delsucc']);
 
         $single_user = $em->find('Users', $id);
 

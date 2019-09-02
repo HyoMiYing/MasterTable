@@ -56,13 +56,13 @@ class Users
     /**
      * Set postNumber.
      *
-     * @param string|null $postNumber
+     * @param string|null $post_number
      *
      * @return Users
      */
-    public function setPostNumber($postNumber = null)
+    public function setPostNumber($post_number = null)
     {
-        $this->post_number = $postNumber;
+        $this->post_number = $post_number;
 
         return $this;
     }
@@ -93,4 +93,10 @@ class MyRepository extends Doctrine\ORM\EntityRepository {
     public function findByExample(MyEntity $entity) {
         return $this->findBy($entity->toArray());
     }
+    /**
+     * @var string|null
+     */
+    private $post_number;
+
+
 }
