@@ -19,7 +19,3 @@ uporabnikov v login sistemu.
 5. Ustvarimo mapo, do katere Apache strežnik dostopa preko naslova 'test.local'.
 6. Vsebino tega repositorija kopiramo v to mapo.
 7. Do delujoče PHP skripte dostopamo v brskalniku na naslovu 'test.local'.
-
-<h3>Opombe</h3>
-
-V nalogi je zdaj vse razen knapsack problema.
