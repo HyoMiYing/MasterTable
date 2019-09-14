@@ -26,11 +26,11 @@
             $em->remove($single_user);
             $em->flush();
             $_SESSION['delsucc'] = "User with ID=".$id." deleted successfully";
-            header('Location: http://test.local');
+            header('Location: index.php');
         // Return to home page with error if user doesn't exist.
         } else {
             $_SESSION['delerr'] = "User with ID=".$id." does not exist";
-            header('Location: http://test.local');
+            header('Location: index.php');
         }
 
     }
@@ -42,5 +42,5 @@
     
     // Redirect to home page if 'delete.php' is accessed manually.
     } else {
-        header('Location: http://test.local');
+        header('Location: index.php');
     }

@@ -38,30 +38,30 @@
         // Check that 'name' field isn't too long.
         if(strlen($name)>255){
             $_SESSION['adderr_longname'] = 'Name='.$name.' is too long';
-            header('Location: http://test.local');
+            header('Location: index.php');
         } else {
 
             // Check that 'post_number' field isn't too long.
             if(strlen($post_number)>10) {
             $_SESSION['adderr_longpost'] = 'Post Number='.$post_number.' is too long';
-            header("Location: http://test.local");
+            header("Location: index.php");
             } else {
 
                 // Check whether this user already exists.
                 if($users = $em->getRepository('Users')->findOneBy(array('name' => $name, 'post_number' => $post_number)) == true) {
                     $_SESSION['adderr_userexists'] = 'User with name='.$name.' and post number='.$post_number.' already exists';
-                    header("Location: http://test.local");
+                    header("Location: index.php");
                 } else {
 
                     // If everything is ok, run function to add entry to database.
                     add_a_row_orm($name, $post_number, $em);
                     $_SESSION['addsucc'] = 'New user successfully added to the database';
-                    header("Location: http://test.local");
+                    header("Location: index.php");
             }
         }
     }
     // Redirect to home page if 'add.php' is accessed manually.
     } else {
-        header("Location: http://test.local");
+        header("Location: index.php");
     }
 ?>
