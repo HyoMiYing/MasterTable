@@ -13,12 +13,12 @@
     if (isset($_SESSION['username'])) {
         // $_SESSION['username'] is logged in
     } else {
-        header("Location: http://test.local/login.php");
+        header("Location: login.php");
     }
 
     if(isset($_POST['logout'])) {
         unset($_SESSION['username']);
-        header("Location: http://test.local/login.php");
+        header("Location: login.php");
     }
 
     // Search database querys with post number. Use Doctrine ORM.

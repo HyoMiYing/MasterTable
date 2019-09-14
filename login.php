@@ -31,7 +31,7 @@
                 unset($_SESSION['password_error']);
 
                 // Redirect to the main page.
-                header("Location: http://test.local");
+                header("Location: index.php");
             } else {
                 unset($_SESSION['username_error']);
                 $_SESSION['password_error'] = "Wrong password";

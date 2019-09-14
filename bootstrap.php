@@ -17,7 +17,7 @@
     $dbParams = array(
         'driver'   => 'pdo_mysql',
         'user'     => 'rok',
-        'password' => '123',
+        'password' => 'w0Op1Ty$%&D01il€',
         'dbname'   => 'mojabaza',
     );
 
